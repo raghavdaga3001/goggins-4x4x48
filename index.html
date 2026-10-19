@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Goggins 4x4x48 Instagram Carousel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,40 +11,57 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
       background: #000000;
       color: #ffffff;
       font-family: 'Space Grotesk', sans-serif;
-      padding: 30px 10px;
+      padding: 16px 10px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Fixed Top Control Bar */
+    /* Sticky, Mobile-Friendly Toolbar */
+    .toolbar-wrap {
+      width: 100%;
+      max-width: 540px;
+      position: sticky;
+      top: 10px;
+      z-index: 100;
+    }
     .toolbar {
       display: flex;
-      gap: 10px;
-      background: #0d0f14;
+      gap: 6px;
+      background: #0d0f14fa;
+      backdrop-filter: blur(8px);
       border: 1px solid #1c212c;
-      padding: 8px 12px;
+      padding: 6px;
       border-radius: 12px;
       align-items: center;
-      flex-wrap: wrap;
-      justify-content: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+    .tabs-group {
+      display: flex;
+      gap: 4px;
+      flex: 1;
     }
     .tab-btn {
+      flex: 1;
       background: transparent;
-      border: 1px solid #2d3342;
+      border: 1px solid #232834;
       color: #8b949e;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: 8px 4px;
+      border-radius: 6px;
       cursor: pointer;
+      text-align: center;
       transition: all 0.2s;
     }
     .tab-btn.active {
@@ -57,42 +74,49 @@
       border: 1px solid #30363d;
       color: #58a6ff;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: 8px 12px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s;
+      white-space: nowrap;
     }
-    .dl-btn:hover {
-      background: #21262d;
-      border-color: #58a6ff;
+    .dl-btn:active {
+      transform: scale(0.97);
     }
 
-    /* Exact 4:5 Instagram Canvas (540x675 preview -> 1080x1350 on 2x export) */
+    /* Responsive 4:5 Aspect Ratio Container */
+    .canvas-viewport {
+      width: 100%;
+      max-width: 540px;
+      display: flex;
+      justify-content: center;
+    }
+
     .ig-canvas {
-      width: 540px;
-      height: 675px;
+      width: 100%;
+      aspect-ratio: 4 / 5;
       background: #050608;
       border: 1px solid #1c212c;
-      border-radius: 16px;
-      padding: 26px 20px;
+      border-radius: 14px;
+      padding: clamp(14px, 3.5vw, 24px) clamp(12px, 3vw, 20px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+      overflow: hidden;
     }
 
     /* Quotes */
     .quote-box {
       background: #0d0f14;
       border-left: 3px solid #ff5722;
-      padding: 9px 12px;
+      padding: clamp(6px, 1.6vw, 9px) clamp(8px, 2vw, 12px);
       border-radius: 4px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      line-height: 1.45;
+      font-size: clamp(0.52rem, 1.55vw, 0.65rem);
+      line-height: 1.4;
       color: #d1d5db;
     }
     .quote-box.cyan-border {
@@ -103,37 +127,38 @@
 
     /* Headers */
     .header-block {
-      margin: 4px 0 6px 0;
+      margin: 2px 0 4px 0;
     }
     .tag-row {
       display: flex;
-      gap: 6px;
-      margin-bottom: 4px;
+      gap: 5px;
+      margin-bottom: 3px;
     }
     .tag {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.56rem;
+      font-size: clamp(0.48rem, 1.4vw, 0.56rem);
       font-weight: 700;
-      letter-spacing: 1px;
-      padding: 2px 6px;
+      letter-spacing: 0.8px;
+      padding: 1px 5px;
       border-radius: 3px;
       text-transform: uppercase;
     }
     .tag-orange { background: #ff572220; color: #ff5722; border: 1px solid #ff572240; }
     .tag-green { background: #00e67620; color: #00e676; border: 1px solid #00e67640; }
+    
     .main-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 3.0rem;
+      font-size: clamp(2.3rem, 7.5vw, 3.1rem);
       line-height: 0.95;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.2px;
     }
     .main-title span { color: #ff5722; }
     .sub-meta {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.62rem;
+      font-size: clamp(0.48rem, 1.4vw, 0.62rem);
       color: #71767d;
-      letter-spacing: 1.5px;
-      margin-top: 4px;
+      letter-spacing: 1px;
+      margin-top: 3px;
       text-transform: uppercase;
     }
 
@@ -141,14 +166,14 @@
     .hero-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin: 6px 0;
+      gap: clamp(6px, 1.8vw, 10px);
+      margin: 4px 0;
     }
     .hero-card {
       background: #090b0e;
       border: 1px solid #1a1e27;
-      border-radius: 10px;
-      padding: 12px 14px;
+      border-radius: 8px;
+      padding: clamp(8px, 2.2vw, 12px) clamp(10px, 2.5vw, 14px);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -157,25 +182,25 @@
       grid-column: span 2;
       background: linear-gradient(135deg, #130e0c, #090b0e);
       border-color: #ff572250;
-      padding: 14px 16px;
+      padding: clamp(10px, 2.8vw, 14px) clamp(12px, 3vw, 16px);
     }
     .h-label {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.60rem;
-      letter-spacing: 1.5px;
+      font-size: clamp(0.48rem, 1.4vw, 0.60rem);
+      letter-spacing: 1.2px;
       color: #6e7681;
       text-transform: uppercase;
       font-weight: 700;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .h-val {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1.8rem;
+      font-size: clamp(1.4rem, 4.2vw, 1.8rem);
       font-weight: 800;
       line-height: 1;
     }
     .hero-card.featured .h-val {
-      font-size: 2.6rem;
+      font-size: clamp(2.1rem, 6.2vw, 2.6rem);
       color: #ffffff;
     }
     .h-val.cyan { color: #00e5ff; }
@@ -183,12 +208,12 @@
     .h-val.pink { color: #ff4081; }
     .h-val.amber { color: #ffc107; }
     .h-val.accent { color: #ff5722; }
-    .h-unit { font-size: 0.85rem; color: #8b949e; margin-left: 2px; }
+    .h-unit { font-size: clamp(0.7rem, 2vw, 0.85rem); color: #8b949e; margin-left: 2px; }
     .h-sub {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.58rem;
+      font-size: clamp(0.46rem, 1.3vw, 0.58rem);
       color: #555c65;
-      margin-top: 4px;
+      margin-top: 3px;
     }
 
     /* Slide 2 Chart */
@@ -196,43 +221,45 @@
       flex: 1;
       width: 100%;
       height: 100%;
+      min-height: 0;
       position: relative;
-      margin-top: 8px;
+      margin-top: 6px;
     }
 
-    /* Slide 3 FIXED TABLE WITH STRICT WIDTHS */
+    /* Slide 3 Responsive Table */
     .table-container-full {
       flex: 1;
       background: #080a0d;
       border: 1px solid #1a1e27;
       border-radius: 8px;
-      margin: 6px 0;
+      margin: 4px 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
       width: 100%;
+      overflow: hidden;
     }
     table {
       width: 100%;
       table-layout: fixed;
       border-collapse: collapse;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.57rem;
+      font-size: clamp(0.46rem, 1.35vw, 0.58rem);
       text-align: left;
     }
     th {
       background: #0e1219;
-      padding: 5px 3px;
+      padding: clamp(3px, 1vw, 5px) 2px;
       color: #71767d;
-      font-size: 0.51rem;
-      letter-spacing: 0.5px;
+      font-size: clamp(0.42rem, 1.2vw, 0.52rem);
+      letter-spacing: 0.3px;
       text-transform: uppercase;
       border-bottom: 1px solid #1a1e27;
       overflow: hidden;
       white-space: nowrap;
     }
     td {
-      padding: 4.6px 3px;
+      padding: clamp(3px, 0.9vw, 4.6px) 2px;
       border-bottom: 1px solid #12151d;
       color: #c9d1d9;
       overflow: hidden;
@@ -240,11 +267,11 @@
     }
     .text-right {
       text-align: right;
-      padding-right: 6px;
+      padding-right: clamp(2px, 0.8vw, 5px);
     }
     .pill {
-      font-size: 0.48rem;
-      padding: 1px 3px;
+      font-size: clamp(0.40rem, 1.1vw, 0.48rem);
+      padding: 1px 2px;
       border-radius: 2px;
       text-transform: uppercase;
       font-weight: 700;
@@ -252,15 +279,13 @@
     .p-out { background: #ff572220; color: #ff7043; }
     .p-in { background: #00e5ff20; color: #00e5ff; }
     
-    /* Best Stat Styling */
     .best-val {
       font-weight: 800;
       color: #ffffff;
     }
     .bolt-icon {
       color: #ffc107;
-      font-size: 0.65rem;
-      margin-left: 2px;
+      font-size: clamp(0.48rem, 1.3vw, 0.62rem);
       vertical-align: middle;
     }
 
@@ -272,7 +297,7 @@
       border-top: 1px solid #232938;
       border-bottom: 1px solid #232938;
       color: #ffffff;
-      padding: 5px 3px;
+      padding: clamp(3px, 1vw, 5px) 2px;
     }
     .grandtotal-row {
       background: #141a24;
@@ -281,233 +306,238 @@
     .grandtotal-row td {
       border-top: 1.5px solid #ff5722;
       color: #ffffff;
-      font-size: 0.60rem;
-      padding: 6px 3px;
+      font-size: clamp(0.48rem, 1.4vw, 0.60rem);
+      padding: clamp(4px, 1.1vw, 6px) 2px;
     }
   </style>
 </head>
 <body>
 
   <!-- Controls -->
-  <div class="toolbar">
-    <button class="tab-btn" onclick="showSlide(1)">Slide 1: Hero</button>
-    <button class="tab-btn" onclick="showSlide(2)">Slide 2: Telemetry</button>
-    <button class="tab-btn active" onclick="showSlide(3)">Slide 3: Splits</button>
-    <div style="width: 1px; height: 24px; background: #252b38; margin: 0 4px;"></div>
-    <button class="dl-btn" onclick="downloadCurrentSlide()">Download Current (1080x1350 PNG)</button>
-  </div>
-
-  <!-- SLIDE 1: HERO PROOF CARD -->
-  <div class="ig-canvas" id="slide1" style="display: none;">
-    <div class="quote-box">
-      “One more round when you think you can’t — that’s what makes all the difference in your life.”
-      <div style="margin-top: 2px;"><span class="author-orange">— ROCKY BALBOA</span></div>
-    </div>
-
-    <div class="header-block">
-      <div class="tag-row">
-        <span class="tag tag-orange">MISSION LOG</span>
-        <span class="tag tag-green">STATUS: COMPLETED</span>
+  <div class="toolbar-wrap">
+    <div class="toolbar">
+      <div class="tabs-group">
+        <button class="tab-btn" onclick="showSlide(1)">Slide 1</button>
+        <button class="tab-btn" onclick="showSlide(2)">Slide 2</button>
+        <button class="tab-btn active" onclick="showSlide(3)">Slide 3</button>
       </div>
-      <h1 class="main-title">GOGGINS <span>4x4x48</span></h1>
-      <div class="sub-meta">12 LEGS &bull; 48 CONSECUTIVE HOURS &bull; MUMBAI, INDIA</div>
-    </div>
-
-    <div class="hero-grid">
-      <div class="hero-card featured">
-        <span class="h-label">Total Distance</span>
-        <div class="h-val">78.00<span class="h-unit">KM</span></div>
-        <span class="h-sub">48.47 Miles Completed Across 12 Legs</span>
-      </div>
-
-      <div class="hero-card">
-        <span class="h-label">Moving Time</span>
-        <div class="h-val cyan">8:44:05</div>
-        <span class="h-sub">524m 05s Elapsed</span>
-      </div>
-
-      <div class="hero-card">
-        <span class="h-label">Average Pace</span>
-        <div class="h-val green">6:43<span class="h-unit">/KM</span></div>
-        <span class="h-sub">10:49 /mi Average</span>
-      </div>
-
-      <div class="hero-card">
-        <span class="h-label">Heart Rate (Avg/Peak)</span>
-        <div class="h-val pink">162 <span style="font-size: 1.1rem; color:#888;">/ 181</span><span class="h-unit">BPM</span></div>
-        <span class="h-sub">Aerobic Baseline</span>
-      </div>
-
-      <div class="hero-card">
-        <span class="h-label">Footstrikes & Cadence</span>
-        <div class="h-val cyan">87,860</div>
-        <span class="h-sub">168 SPM Average Cadence</span>
-      </div>
-
-      <div class="hero-card">
-        <span class="h-label">Active Calories</span>
-        <div class="h-val amber">4,872<span class="h-unit">KCAL</span></div>
-        <span class="h-sub">~406 kcal / Leg</span>
-      </div>
-
-      <div class="hero-card">
-        <span class="h-label">Body Mass Shift</span>
-        <div class="h-val accent">-2.50<span class="h-unit">KG</span></div>
-        <span class="h-sub">57.95 &rarr; 55.45 kg (-4.3%)</span>
-      </div>
-    </div>
-
-    <div class="quote-box" style="border-left-color: #555c65;">
-      PROTOCOL: 4 MILES EVERY 4 HOURS FOR 48 CONSECUTIVE HOURS. 12 / 12 LEGS COMPLETED ON A ROLLING 4-HOUR CLOCK.
+      <button class="dl-btn" onclick="downloadCurrentSlide()">Save 1080x1350</button>
     </div>
   </div>
 
-  <!-- SLIDE 2: TELEMETRY GRAPH -->
-  <div class="ig-canvas" id="slide2" style="display: none;">
-    <div class="header-block" style="margin-top: 0;">
-      <div class="tag-row">
-        <span class="tag tag-orange">INTERVAL TELEMETRY</span>
-        <span class="tag tag-green">48-HOUR PROGRESSION</span>
+  <div class="canvas-viewport">
+    <!-- SLIDE 1: HERO PROOF CARD -->
+    <div class="ig-canvas" id="slide1" style="display: none;">
+      <div class="quote-box">
+        “One more round when you think you can’t — that’s what makes all the difference in your life.”
+        <div style="margin-top: 2px;"><span class="author-orange">— ROCKY BALBOA</span></div>
       </div>
-      <h1 class="main-title" style="font-size: 2.5rem;">PACE &amp; HEART RATE</h1>
-      <div class="sub-meta">PACE (INVERTED) VS AVERAGE HEART RATE ACROSS 12 INTERVALS</div>
-    </div>
 
-    <div class="chart-container-clean">
-      <canvas id="telemetryChart"></canvas>
-    </div>
-
-    <div class="quote-box" style="border-left-color: #555c65; margin-top: 10px;">
-      ORANGE: AVG PACE (/KM) &bull; CYAN: AVG HEART RATE (BPM) &bull; INTERVALS 1–12
-    </div>
-  </div>
-
-  <!-- SLIDE 3: SPLITS MATRIX -->
-  <div class="ig-canvas" id="slide3">
-    <div class="header-block" style="margin-top: 0; margin-bottom: 2px;">
-      <div class="tag-row">
-        <span class="tag tag-orange">OFFICIAL LOG</span>
-        <span class="tag tag-green">ALL 12 LEGS</span>
+      <div class="header-block">
+        <div class="tag-row">
+          <span class="tag tag-orange">MISSION LOG</span>
+          <span class="tag tag-green">STATUS: COMPLETED</span>
+        </div>
+        <h1 class="main-title">GOGGINS <span>4x4x48</span></h1>
+        <div class="sub-meta">12 LEGS &bull; 48 CONSECUTIVE HOURS &bull; MUMBAI, INDIA</div>
       </div>
-      <h1 class="main-title" style="font-size: 2.3rem;">CHRONOLOGICAL <span>SPLITS</span></h1>
+
+      <div class="hero-grid">
+        <div class="hero-card featured">
+          <span class="h-label">Total Distance</span>
+          <div class="h-val">78.00<span class="h-unit">KM</span></div>
+          <span class="h-sub">48.47 Miles Completed Across 12 Legs</span>
+        </div>
+
+        <div class="hero-card">
+          <span class="h-label">Moving Time</span>
+          <div class="h-val cyan">8:44:05</div>
+          <span class="h-sub">524m 05s Elapsed</span>
+        </div>
+
+        <div class="hero-card">
+          <span class="h-label">Average Pace</span>
+          <div class="h-val green">6:43<span class="h-unit">/KM</span></div>
+          <span class="h-sub">10:49 /mi Average</span>
+        </div>
+
+        <div class="hero-card">
+          <span class="h-label">Heart Rate (Avg/Peak)</span>
+          <div class="h-val pink">162 <span style="font-size: 0.9em; color:#888;">/ 181</span><span class="h-unit">BPM</span></div>
+          <span class="h-sub">Aerobic Baseline</span>
+        </div>
+
+        <div class="hero-card">
+          <span class="h-label">Footstrikes &amp; Cadence</span>
+          <div class="h-val cyan">87,860</div>
+          <span class="h-sub">168 SPM Average Cadence</span>
+        </div>
+
+        <div class="hero-card">
+          <span class="h-label">Active Calories</span>
+          <div class="h-val amber">4,872<span class="h-unit">KCAL</span></div>
+          <span class="h-sub">~406 kcal / Leg</span>
+        </div>
+
+        <div class="hero-card">
+          <span class="h-label">Body Mass Shift</span>
+          <div class="h-val accent">-2.50<span class="h-unit">KG</span></div>
+          <span class="h-sub">57.95 &rarr; 55.45 kg (-4.3%)</span>
+        </div>
+      </div>
+
+      <div class="quote-box" style="border-left-color: #555c65;">
+        PROTOCOL: 4 MILES EVERY 4 HOURS FOR 48 CONSECUTIVE HOURS. 12 / 12 LEGS COMPLETED ON A ROLLING 4-HOUR CLOCK.
+      </div>
     </div>
 
-    <div class="table-container-full">
-      <table>
-        <colgroup>
-          <col style="width: 28px;">  <!-- Leg -->
-          <col style="width: 70px;">  <!-- Date & Time (DD/MM HH:MM) -->
-          <col style="width: 32px;">  <!-- Type -->
-          <col style="width: 42px;">  <!-- Dist -->
-          <col style="width: 44px;">  <!-- Duration -->
-          <col style="width: 58px;">  <!-- Avg Pace -->
-          <col style="width: 40px;">  <!-- Best Pace -->
-          <col style="width: 30px;">  <!-- HR -->
-          <col style="width: 50px;">  <!-- Steps -->
-          <col style="width: 46px;">  <!-- Cal -->
-        </colgroup>
-        <thead>
-          <tr>
-            <th>LEG</th>
-            <th>TIME</th>
-            <th>TYPE</th>
-            <th>DIST</th>
-            <th>DUR</th>
-            <th>AVG PACE</th>
-            <th>BEST</th>
-            <th>HR</th>
-            <th class="text-right">STEPS</th>
-            <th class="text-right">CAL</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>#01</td><td>17/10 00:00</td><td><span class="pill p-out">Out</span></td>
-            <td>6.50k</td><td>43:49</td><td>6:44</td><td>5:16</td><td>167</td>
-            <td class="text-right">7,016</td><td class="text-right">404</td>
-          </tr>
-          <tr>
-            <td>#02</td><td>17/10 04:00</td><td><span class="pill p-out">Out</span></td>
-            <td>6.52k</td><td>44:47</td><td>6:52</td><td>5:24</td><td>167</td>
-            <td class="text-right">7,278</td><td class="text-right">410</td>
-          </tr>
-          <tr>
-            <td>#03</td><td>17/10 08:00</td><td><span class="pill p-in">Ind</span></td>
-            <td>6.45k</td><td>43:42</td><td>6:47</td><td>5:12</td><td>164</td>
-            <td class="text-right">7,280</td><td class="text-right"><strong class="best-val">417</strong></td>
-          </tr>
-          <tr>
-            <td>#04</td><td>17/10 12:00</td><td><span class="pill p-in">Ind</span></td>
-            <td>6.47k</td><td>42:13</td><td>6:32</td><td>4:51</td><td>159</td>
-            <td class="text-right">7,186</td><td class="text-right">392</td>
-          </tr>
-          <tr>
-            <td>#05</td><td>17/10 16:00</td><td><span class="pill p-in">Ind</span></td>
-            <td>6.46k</td><td>42:10</td><td>6:32</td><td>4:18</td><td>159</td>
-            <td class="text-right">7,214</td><td class="text-right">393</td>
-          </tr>
-          <tr>
-            <td>#06</td><td>17/10 20:00</td><td><span class="pill p-in">Ind</span></td>
-            <td>6.54k</td><td>44:24</td><td>6:47</td><td>4:20</td><td>158</td>
-            <td class="text-right">7,456</td><td class="text-right">407</td>
-          </tr>
-          <tr class="subtotal-row">
-            <td colspan="3">DAY 1 (LEGS 1–6)</td>
-            <td>38.94k</td><td>4:21:05</td><td>6:42</td><td>—</td><td>162</td>
-            <td class="text-right">43,430</td><td class="text-right">2,423</td>
-          </tr>
-          <tr>
-            <td>#07</td><td>18/10 00:00</td><td><span class="pill p-out">Out</span></td>
-            <td>6.49k</td><td>46:48</td><td>7:13</td><td>4:59</td><td>158</td>
-            <td class="text-right"><strong class="best-val">7,936</strong></td><td class="text-right">409</td>
-          </tr>
-          <tr>
-            <td>#08</td><td>18/10 04:00</td><td><span class="pill p-out">Out</span></td>
-            <td>6.49k</td><td>45:08</td><td>6:58</td><td>5:34</td><td><strong class="best-val">157</strong></td>
-            <td class="text-right">7,626</td><td class="text-right">403</td>
-          </tr>
-          <tr>
-            <td>#09</td><td>18/10 08:00</td><td><span class="pill p-out">Out</span></td>
-            <td>6.49k</td><td>44:09</td><td>6:48</td><td>5:51</td><td>162</td>
-            <td class="text-right">7,504</td><td class="text-right">411</td>
-          </tr>
-          <tr>
-            <td>#10</td><td>18/10 12:00</td><td><span class="pill p-in">Ind</span></td>
-            <td>6.46k</td><td>43:22</td><td>6:43</td><td>5:07</td><td>159</td>
-            <td class="text-right">7,426</td><td class="text-right">411</td>
-          </tr>
-          <tr style="background: #ffc10710;">
-            <td>#11</td><td>18/10 16:00</td><td><span class="pill p-out">Out</span></td>
-            <td><strong class="best-val">6.59k</strong></td>
-            <td><strong class="best-val">41:16</strong></td>
-            <td><strong class="best-val" style="color: #ffc107;">6:16</strong><span class="bolt-icon">⚡</span></td>
-            <td><strong class="best-val">3:44</strong></td>
-            <td>165</td>
-            <td class="text-right">6,920</td><td class="text-right">404</td>
-          </tr>
-          <tr>
-            <td>#12</td><td>18/10 20:00</td><td><span class="pill p-out">Out</span></td>
-            <td>6.54k</td><td>42:17</td><td>6:28</td><td>3:57</td><td>165</td>
-            <td class="text-right">7,018</td><td class="text-right">411</td>
-          </tr>
-          <tr class="subtotal-row">
-            <td colspan="3">DAY 2 (LEGS 7–12)</td>
-            <td>39.06k</td><td>4:23:00</td><td>6:44</td><td>—</td><td>161</td>
-            <td class="text-right">44,430</td><td class="text-right">2,449</td>
-          </tr>
-          <tr class="grandtotal-row">
-            <td colspan="3">TOTAL (12 LEGS)</td>
-            <td>78.00k</td><td>8:44:05</td><td>6:43</td><td>3:44</td><td>162</td>
-            <td class="text-right">87,860</td><td class="text-right">4,872</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- SLIDE 2: TELEMETRY GRAPH -->
+    <div class="ig-canvas" id="slide2" style="display: none;">
+      <div class="header-block" style="margin-top: 0;">
+        <div class="tag-row">
+          <span class="tag tag-orange">INTERVAL TELEMETRY</span>
+          <span class="tag tag-green">48-HOUR PROGRESSION</span>
+        </div>
+        <h1 class="main-title">PACE &amp; HEART RATE</h1>
+        <div class="sub-meta">PACE (INVERTED) VS AVERAGE HEART RATE ACROSS 12 INTERVALS</div>
+      </div>
+
+      <div class="chart-container-clean">
+        <canvas id="telemetryChart"></canvas>
+      </div>
+
+      <div class="quote-box" style="border-left-color: #555c65;">
+        ORANGE: AVG PACE (/KM) &bull; CYAN: AVG HEART RATE (BPM) &bull; INTERVALS 1–12
+      </div>
     </div>
 
-    <!-- 2nd Rocky Quote at Bottom of Slide 3 -->
-    <div class="quote-box cyan-border">
-      “You gotta be willing to take the hits, and not pointing fingers saying you ain’t where you wanna be because of him, or her, or anybody. Cowards do that and that ain’t you. You’re better than that!”
-      <div style="margin-top: 2px;"><span class="author-cyan">— ROCKY BALBOA</span></div>
+    <!-- SLIDE 3: SPLITS MATRIX -->
+    <div class="ig-canvas" id="slide3">
+      <div class="header-block" style="margin-top: 0; margin-bottom: 2px;">
+        <div class="tag-row">
+          <span class="tag tag-orange">OFFICIAL LOG</span>
+          <span class="tag tag-green">ALL 12 LEGS</span>
+        </div>
+        <h1 class="main-title">CHRONOLOGICAL <span>SPLITS</span></h1>
+      </div>
+
+      <div class="table-container-full">
+        <table>
+          <!-- Percentage-based column budget perfectly distributed to 100% -->
+          <colgroup>
+            <col style="width: 6.5%;">  <!-- Leg -->
+            <col style="width: 18.5%;"> <!-- Date & Time -->
+            <col style="width: 6.5%;">  <!-- Type -->
+            <col style="width: 9.5%;">  <!-- Dist -->
+            <col style="width: 9.5%;">  <!-- Duration -->
+            <col style="width: 14.5%;"> <!-- Avg Pace -->
+            <col style="width: 8.5%;">  <!-- Best Pace -->
+            <col style="width: 6.5%;">  <!-- HR -->
+            <col style="width: 10.5%;"> <!-- Steps -->
+            <col style="width: 9.5%;">  <!-- Cal -->
+          </colgroup>
+          <thead>
+            <tr>
+              <th>LEG</th>
+              <th>TIME</th>
+              <th>TYP</th>
+              <th>DIST</th>
+              <th>DUR</th>
+              <th>AVG PACE</th>
+              <th>BST</th>
+              <th>HR</th>
+              <th class="text-right">STEPS</th>
+              <th class="text-right">CAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#01</td><td>17/10 00:00</td><td><span class="pill p-out">Out</span></td>
+              <td>6.50k</td><td>43:49</td><td>6:44</td><td>5:16</td><td>167</td>
+              <td class="text-right">7,016</td><td class="text-right">404</td>
+            </tr>
+            <tr>
+              <td>#02</td><td>17/10 04:00</td><td><span class="pill p-out">Out</span></td>
+              <td>6.52k</td><td>44:47</td><td>6:52</td><td>5:24</td><td>167</td>
+              <td class="text-right">7,278</td><td class="text-right">410</td>
+            </tr>
+            <tr>
+              <td>#03</td><td>17/10 08:00</td><td><span class="pill p-in">Ind</span></td>
+              <td>6.45k</td><td>43:42</td><td>6:47</td><td>5:12</td><td>164</td>
+              <td class="text-right">7,280</td><td class="text-right"><strong class="best-val">417</strong></td>
+            </tr>
+            <tr>
+              <td>#04</td><td>17/10 12:00</td><td><span class="pill p-in">Ind</span></td>
+              <td>6.47k</td><td>42:13</td><td>6:32</td><td>4:51</td><td>159</td>
+              <td class="text-right">7,186</td><td class="text-right">392</td>
+            </tr>
+            <tr>
+              <td>#05</td><td>17/10 16:00</td><td><span class="pill p-in">Ind</span></td>
+              <td>6.46k</td><td>42:10</td><td>6:32</td><td>4:18</td><td>159</td>
+              <td class="text-right">7,214</td><td class="text-right">393</td>
+            </tr>
+            <tr>
+              <td>#06</td><td>17/10 20:00</td><td><span class="pill p-in">Ind</span></td>
+              <td>6.54k</td><td>44:24</td><td>6:47</td><td>4:20</td><td>158</td>
+              <td class="text-right">7,456</td><td class="text-right">407</td>
+            </tr>
+            <tr class="subtotal-row">
+              <td colspan="3">D1 (LEGS 1–6)</td>
+              <td>38.94k</td><td>4:21:05</td><td>6:42</td><td>—</td><td>162</td>
+              <td class="text-right">43,430</td><td class="text-right">2,423</td>
+            </tr>
+            <tr>
+              <td>#07</td><td>18/10 00:00</td><td><span class="pill p-out">Out</span></td>
+              <td>6.49k</td><td>46:48</td><td>7:13</td><td>4:59</td><td>158</td>
+              <td class="text-right"><strong class="best-val">7,936</strong></td><td class="text-right">409</td>
+            </tr>
+            <tr>
+              <td>#08</td><td>18/10 04:00</td><td><span class="pill p-out">Out</span></td>
+              <td>6.49k</td><td>45:08</td><td>6:58</td><td>5:34</td><td><strong class="best-val">157</strong></td>
+              <td class="text-right">7,626</td><td class="text-right">403</td>
+            </tr>
+            <tr>
+              <td>#09</td><td>18/10 08:00</td><td><span class="pill p-out">Out</span></td>
+              <td>6.49k</td><td>44:09</td><td>6:48</td><td>5:51</td><td>162</td>
+              <td class="text-right">7,504</td><td class="text-right">411</td>
+            </tr>
+            <tr>
+              <td>#10</td><td>18/10 12:00</td><td><span class="pill p-in">Ind</span></td>
+              <td>6.46k</td><td>43:22</td><td>6:43</td><td>5:07</td><td>159</td>
+              <td class="text-right">7,426</td><td class="text-right">411</td>
+            </tr>
+            <tr style="background: #ffc10710;">
+              <td>#11</td><td>18/10 16:00</td><td><span class="pill p-out">Out</span></td>
+              <td><strong class="best-val">6.59k</strong></td>
+              <td><strong class="best-val">41:16</strong></td>
+              <td><strong class="best-val" style="color: #ffc107;">6:16</strong><span class="bolt-icon">⚡</span></td>
+              <td><strong class="best-val">3:44</strong></td>
+              <td>165</td>
+              <td class="text-right">6,920</td><td class="text-right">404</td>
+            </tr>
+            <tr>
+              <td>#12</td><td>18/10 20:00</td><td><span class="pill p-out">Out</span></td>
+              <td>6.54k</td><td>42:17</td><td>6:28</td><td>3:57</td><td>165</td>
+              <td class="text-right">7,018</td><td class="text-right">411</td>
+            </tr>
+            <tr class="subtotal-row">
+              <td colspan="3">D2 (LEGS 7–12)</td>
+              <td>39.06k</td><td>4:23:00</td><td>6:44</td><td>—</td><td>161</td>
+              <td class="text-right">44,430</td><td class="text-right">2,449</td>
+            </tr>
+            <tr class="grandtotal-row">
+              <td colspan="3">TOTAL (12 LEGS)</td>
+              <td>78.00k</td><td>8:44:05</td><td>6:43</td><td>3:44</td><td>162</td>
+              <td class="text-right">87,860</td><td class="text-right">4,872</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="quote-box cyan-border">
+        “You gotta be willing to take the hits, and not pointing fingers saying you ain’t where you wanna be because of him, or her, or anybody. Cowards do that and that ain’t you. You’re better than that!”
+        <div style="margin-top: 2px;"><span class="author-cyan">— ROCKY BALBOA</span></div>
+      </div>
     </div>
   </div>
 
@@ -522,15 +552,19 @@
       document.getElementById('slide1').style.display = n === 1 ? 'flex' : 'none';
       document.getElementById('slide2').style.display = n === 2 ? 'flex' : 'none';
       document.getElementById('slide3').style.display = n === 3 ? 'flex' : 'none';
+
+      if (n === 2 && window.telemetryChartInstance) {
+        window.telemetryChartInstance.resize();
+      }
     }
 
-    // Chart.js initialization for Slide 2
+    // Chart.js Setup
     const ctx = document.getElementById('telemetryChart').getContext('2d');
     const paceData = [6.73, 6.87, 6.78, 6.53, 6.53, 6.78, 7.22, 6.97, 6.80, 6.72, 6.27, 6.47];
     const hrData   = [167, 167, 164, 159, 159, 158, 158, 157, 162, 159, 165, 165];
     const labels   = ['L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'L7', 'L8', 'L9', 'L10', 'L11', 'L12'];
 
-    new Chart(ctx, {
+    window.telemetryChartInstance = new Chart(ctx, {
       type: 'line',
       data: {
         labels: labels,
@@ -542,9 +576,9 @@
             backgroundColor: '#ff572215',
             yAxisID: 'yPace',
             tension: 0.35,
-            borderWidth: 3,
+            borderWidth: 2.5,
             pointBackgroundColor: '#ff5722',
-            pointRadius: 5
+            pointRadius: 4
           },
           {
             label: 'Avg HR (bpm)',
@@ -554,9 +588,9 @@
             yAxisID: 'yHr',
             tension: 0.35,
             borderWidth: 2,
-            borderDash: [5, 4],
+            borderDash: [4, 4],
             pointBackgroundColor: '#00e5ff',
-            pointRadius: 4
+            pointRadius: 3.5
           }
         ]
       },
@@ -568,14 +602,15 @@
             position: 'top',
             labels: {
               color: '#8b949e',
-              font: { family: "'JetBrains Mono', monospace", size: 10 }
+              font: { family: "'JetBrains Mono', monospace", size: 9 },
+              boxWidth: 12
             }
           }
         },
         scales: {
           x: {
             grid: { color: '#161b22' },
-            ticks: { color: '#8b949e', font: { family: "'JetBrains Mono', monospace" } }
+            ticks: { color: '#8b949e', font: { family: "'JetBrains Mono', monospace", size: 9 } }
           },
           yPace: {
             type: 'linear',
@@ -586,7 +621,7 @@
             grid: { color: '#161b22' },
             ticks: {
               color: '#ff5722',
-              font: { family: "'JetBrains Mono', monospace" },
+              font: { family: "'JetBrains Mono', monospace", size: 9 },
               callback: val => {
                 const m = Math.floor(val);
                 const s = Math.round((val - m) * 60);
@@ -602,34 +637,42 @@
             grid: { drawOnChartArea: false },
             ticks: {
               color: '#00e5ff',
-              font: { family: "'JetBrains Mono', monospace" },
-              callback: val => `${val} bpm`
+              font: { family: "'JetBrains Mono', monospace", size: 9 },
+              callback: val => `${val}`
             }
           }
         }
       }
     });
 
-    // High-Res Export Function
+    // Native High-Res Export
     async function downloadCurrentSlide() {
       const target = document.getElementById(`slide${currentSlide}`);
       const btn = document.querySelector('.dl-btn');
-      btn.innerText = 'Rendering 1080x1350...';
+      btn.innerText = 'Rendering...';
+
+      // Temporarily lock export container to exact 1080x1350 aspect ratio
+      const origWidth = target.style.width;
+      const origHeight = target.style.height;
 
       try {
+        const scaleFactor = 1080 / target.offsetWidth;
         const canvas = await html2canvas(target, {
-          scale: 2,
+          scale: scaleFactor,
           backgroundColor: '#050608',
           useCORS: true
         });
+
         const link = document.createElement('a');
         link.download = `Goggins_4x4x48_Slide_${currentSlide}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
       } catch (err) {
-        alert('Could not render image automatically. Please screenshot the card.');
+        alert('Could not render image automatically. Please take a direct screenshot.');
       } finally {
-        btn.innerText = 'Download Current (1080x1350 PNG)';
+        target.style.width = origWidth;
+        target.style.height = origHeight;
+        btn.innerText = 'Save 1080x1350';
       }
     }
   </script>
