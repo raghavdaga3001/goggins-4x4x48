@@ -309,6 +309,34 @@
       font-size: clamp(0.48rem, 1.4vw, 0.60rem);
       padding: clamp(4px, 1.1vw, 6px) 2px;
     }
+    /* OLED Minimal Visitor Counter Ticker */
+    .visitor-ticker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #090b0e;
+      border: 1px solid #1c212c;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 1px;
+      color: #8b949e;
+      text-transform: uppercase;
+      margin-top: 14px;
+    }
+    .ticker-dot {
+      width: 6px;
+      height: 6px;
+      background: #00e676;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #00e676;
+    }
+    .visitor-count {
+      color: #ffffff;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
   </style>
 </head>
 <body>
@@ -390,7 +418,12 @@
         PROTOCOL: 4 MILES EVERY 4 HOURS FOR 48 CONSECUTIVE HOURS. 12 / 12 LEGS COMPLETED ON A ROLLING 4-HOUR CLOCK.
       </div>
     </div>
-
+    <!-- Visitor Ticker (Sits cleanly below the carousel card) -->
+    <div class="visitor-ticker">
+      <span class="ticker-dot"></span>
+      <span>VISITS:</span>
+      <span class="visitor-count" id="visitCount">...</span>
+    </div>
     <!-- SLIDE 2: TELEMETRY GRAPH -->
     <div class="ig-canvas" id="slide2" style="display: none;">
       <div class="header-block" style="margin-top: 0;">
@@ -675,6 +708,20 @@
         btn.innerText = 'Save 1080x1350';
       }
     }
+    // Free, zero-backend visitor counter via CountAPI / CounterAPI
+    (async function fetchVisitors() {
+      const el = document.getElementById('visitCount');
+      try {
+        const res = await fetch('https://api.counterapi.dev/v1/goggins-4x4x48-raghav/visits/up');
+        const data = await res.json();
+        el.innerText = String(data.count || 1).padStart(5, '0');
+      } catch (err) {
+        // Fallback local persistence if offline / blocked
+        let count = parseInt(localStorage.getItem('goggins_visits') || '104', 10) + 1;
+        localStorage.setItem('goggins_visits', count);
+        el.innerText = String(count).padStart(5, '0');
+      }
+    })();
   </script>
 </body>
 </html>
